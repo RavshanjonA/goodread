@@ -1,8 +1,6 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import CharField, TextField, SlugField, TextChoices, IntegerField, ImageField, URLField, \
-    ManyToManyField, ForeignKey, CASCADE
-from django.forms import DateField
-
+    ManyToManyField, ForeignKey, CASCADE, DateField
 from apps.shared.models import AbstractModel
 
 
@@ -19,11 +17,11 @@ class Book(AbstractModel):
     slug = SlugField(unique=True)
     description = TextField()
     published = DateField()
-    isbn = CharField(max_length=128,unique=True)
+    isbn = CharField(max_length=128, unique=True)
     language = CharField(max_length=7, choices=LanguageChoice.choices, default=LanguageChoice.ENGLISH)
     page = IntegerField()
-    cover = ImageField(upload_to="books/cover/%Y/%m/%d")
-    genre = ManyToManyField("books.BookGenre","books")
+    cover = ImageField(upload_to="books/cover/%Y/%m/%d", default="book_cover.jpg")
+    genre = ManyToManyField("books.BookGenre", "books")
     authors = ManyToManyField("books.BookAuthor", "books")
 
 
@@ -41,6 +39,8 @@ class BookGenre(AbstractModel):
 
 
 class BookReview(AbstractModel):
+    book = ForeignKey("books.Book", CASCADE, "reviews")
+    user = ForeignKey("users.User", CASCADE, "reviews")
     body = TextField()
     rating = IntegerField(validators=[MaxValueValidator(5), MinValueValidator(1)])
     like_count = IntegerField(default=0)

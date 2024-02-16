@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Books {% endblock %}
+{% block content %}
+    <div class="py-4">
+        <h3>Books</h3>
+    </div>
+    {% for book in books %}
+        <div class="row mb-3">
+            <div class="col-2">
+                <img src="{{ book.cover.url }}" alt="No Pic" class="img-fluid">
+            </div>
+            <div class="col-6">
+                <a href="{% url 'books:book-detail' book.slug %}"> {{ book.title }}</a>
+                <p>{{ book.description }}</p>
+            </div>
+        </div>
+    {% empty %}
+        <h3>No Books</h3>
+    {% endfor %}
+
+{% endblock %}

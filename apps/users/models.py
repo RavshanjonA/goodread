@@ -5,11 +5,11 @@ from apps.shared.models import AbstractModel
 
 
 class User(AbstractUser):
-    avatar = ImageField(upload_to="users/avatar/%Y/%m/%d")
+    avatar = ImageField(upload_to="users/avatar/%Y/%m/%d", default="user_avatar.jpg")
     middle_name = CharField(max_length=128)
 
 
 class BookShelf(AbstractModel):
     name = CharField(max_length=128)
-    user = ForeignKey("users.User", CASCADE, 'bookshelf')
+    user = ForeignKey("User", CASCADE, 'bookshelf')
     books = ManyToManyField("books.Book", "bookshelves")

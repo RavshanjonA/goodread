@@ -1,3 +1,6 @@
+
 from django.contrib import admin
 
-# Register your models here.
+from apps.users.models import User, BookShelf
+
+admin.site.register([User, BookShelf])

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block title %} Book Detail{% endblock %}
 {% block content %}
     <h3>Book Detail Page</h3>
@@ -32,28 +33,38 @@
     </div>
     <hr>
     <div class="row">
-        <h3>Reviews</h3>
-        <div class="col-9">
-            {% for review in book.reviews.all %}
-                <div class="card my-2">
-                    <div class="card-header">
-                        {{ review.user.username }} rated {{ review.rating }}
-                        {% for n in range(5) %}
-                            <span class="review-star {% if n <= review.rating %}review-star-active{% endif %}">★</span>
-                        {% endfor %}
+        <div class="col-4">
+            <form action="{% url 'books:add-review' book.pk %}" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="mt-1 btn btn-success">Add Review</button>
+            </form>
+        </div>
+    </div>
+    {% if book.reviews %}
+        <div class="row">
+            <h3>Reviews</h3>
+            <div class="col-9">
+                {% for review in book.reviews.all %}
+                    <div class="card my-2">
+                        <div class="card-header">
+                            {{ review.user.username }} rated {{ review.rating }}
+
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">       {{ review.user.username }}</h5>
+                            <p class="card-text">{{ review.body }}</p>
+                            <a href="#" class="btn btn-light">Like 👍</a> <span
+                                class="fw-lighter">{{ review.like_count }} likes </span>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title">       {{ review.user.username }}</h5>
-                        <p class="card-text">{{ review.body }}</p>
-                        <a href="#" class="btn btn-light">Like 👍</a> <span class="fw-lighter">{{ review.like_count }} likes </span>
-                    </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+
+            </div>
 
         </div>
-
-
-    </div>
-
+    {% else %}
+        <h3>No Reviews</h3>
+    {% endif %}
 
 {% endblock %}

@@ -1,2 +1,5 @@
 Django==5.0.2
 Pillow==10.2.0
+crispy-bootstrap4==2023.1
+python-dotenv==1.0.1
+celery==5.3.6

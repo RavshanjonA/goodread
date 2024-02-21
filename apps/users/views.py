@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -43,3 +43,10 @@ class UserLoginView(View):
                 messages.error(request, "Invalid username or password")
         else:
             return render(request, "users/login.html", {"form": form})
+
+
+class UserLogoutView(View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, "User successfully loged out")
+        return redirect("home")

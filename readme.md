@@ -1,3 +1,3 @@
-### 1.UpdateReview, DeleteReview viewlarini qoshing.
-### 2.ReviewTestCase nomli class yarating review create, review delete, review update, review delete uchun test yozing.
-### 3.BookListView uchun pagination yozing.
+### 1.AddAuthorView, AddBookView,
+### 2.book uchun review qoldirgan paytda bookauthor emailage review body va review ratingni yuborish kerak
+### 3.yuqoridagi 2 ta view uchun test yozing.

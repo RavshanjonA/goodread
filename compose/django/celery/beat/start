@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -o errexit
+set -o nounset
+
+# wait for RabbitMQ server to start
+sleep 10
+
+rm -f './celerybeat.pid'
+#celery -A config.celery:app beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+celery -A config beat -l info

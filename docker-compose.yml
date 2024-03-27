@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  web_service:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    env_file: env/.env
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+#      - postgres
+      - redis
+
+#  postgres:
+#    image: postgres:15-alpine
+#    env_file:
+#      - env/env
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+
+  redis:
+    image: redis:6.2-alpine
+    env_file:
+      - env/.env
+    volumes:
+      - redis_data:/data
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile
+    command: /start-celeryworker
+    volumes:
+      - .:/app
+    env_file:
+      - env/.env
+    depends_on:
+      - redis
+#      - postgres
+#  celery_beat:
+#    build:
+#      context: .
+#      dockerfile: ./compose/django/Dockerfile
+#    command: /start-celerybeat
+#    volumes:
+#      - .:/app
+#    env_file:
+#      - env/env
+#    depends_on:
+#      - redis
+#      - postgres
+#
+#  flower:
+#    build:
+#      context: .
+#      dockerfile: ./compose/django/Dockerfile
+#    command: /start-flower
+#    env_file:
+#      - env/env
+#    volumes:
+#      - .:/app
+#    ports:
+#      - 5557:5555
+#    depends_on:
+#      - redis
+#      - postgres
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/nginx/Dockerfile
+    ports:
+      - '80:80'
+      - '443:443'
+    depends_on:
+      - web_service
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+    volumes:
+      - static_volume:/app/static
+      - media_volume:/app/media
+
+
+volumes:
+  media_volume:
+  static_volume:
+#  postgres_data:
+  redis_data:
